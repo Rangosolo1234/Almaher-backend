@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
 
     "rest_framework",
+    "drf_spectacular",
     "corsheaders",
 
     "stories",
@@ -81,9 +82,17 @@ TEMPLATES = [
 WSGI_APPLICATION = "core.wsgi.application"
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
     ]
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Almaher API",
+    "DESCRIPTION": "API for the Almaher storytelling and communication platform",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 # Database
