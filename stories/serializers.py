@@ -8,8 +8,31 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class StorySerializer(serializers.ModelSerializer):
 
-    category_name = serializers.CharField(source="category.name", read_only=True)
+    category_name = serializers.CharField(
+        source="category.name",
+        read_only=True
+    )
 
     class Meta:
         model = Story
-        fields = "__all__"
+        fields = [
+            "id",
+            "title",
+            "woman_name",
+            "quote",
+            "summary",
+            "story_content",
+            "category",
+            "category_name",
+            "country",
+            "city",
+            "location",
+            "read_time",
+            "featured",
+            "hero_story",
+            "cover_image",
+            "slug",
+            "published_date",
+            "created_at",
+            "updated_at",
+        ]
