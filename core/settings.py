@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    "django.contrib.gis",
+    # "django.contrib.gis",
 
     "rest_framework",
     "drf_spectacular",
@@ -108,7 +108,7 @@ SPECTACULAR_SETTINGS = {
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": config("DB_NAME"),
         "USER": config("DB_USER"),
         "PASSWORD": config("DB_PASSWORD"),
