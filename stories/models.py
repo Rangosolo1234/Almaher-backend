@@ -1,4 +1,5 @@
-from django.contrib.gis.db import models
+# from django.contrib.gis.db import models
+from django.db import models
 from django.utils.text import slugify
 
 
@@ -18,7 +19,7 @@ class Story(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     country = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
-    location = models.PointField(null=True, blank=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
     read_time = models.PositiveIntegerField(default=5)
     featured = models.BooleanField(default=False)
     hero_story = models.BooleanField(default=False)
