@@ -1,8 +1,10 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 from .models import Nomination
 
+
 @admin.register(Nomination)
-class NominationAdmin(admin.ModelAdmin):
+class NominationAdmin(ModelAdmin):
     list_display = (
         "full_name",
         "country",
@@ -12,14 +14,7 @@ class NominationAdmin(admin.ModelAdmin):
         "reviewed",
         "created_at",
     )
-
-    list_filter = (
-        "reviewed",
-        "country",
-        "city",
-        "created_at",
-    )
-
+    list_filter = ("reviewed", "country", "city", "created_at")
     search_fields = (
         "full_name",
         "country",
@@ -28,9 +23,6 @@ class NominationAdmin(admin.ModelAdmin):
         "submitted_by_email",
         "what_she_is_doing",
     )
-
-    readonly_fields = (
-        "created_at",
-    )
-
+    list_editable = ("reviewed",)
+    readonly_fields = ("created_at",)
     ordering = ("-created_at",)
