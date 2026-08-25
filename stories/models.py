@@ -1,6 +1,7 @@
 # from django.contrib.gis.db import models
 from django.db import models
 from django.utils.text import slugify
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
@@ -23,7 +24,7 @@ class Story(models.Model):
     read_time = models.PositiveIntegerField(default=5)
     featured = models.BooleanField(default=False)
     hero_story = models.BooleanField(default=False)
-    cover_image = models.ImageField(upload_to="stories/", null=True, blank=True)
+    cover_image = CloudinaryField("cover_image", folder="almaher/stories", null=True, blank=True)
     slug = models.SlugField(unique=True,blank=True)
     published_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
