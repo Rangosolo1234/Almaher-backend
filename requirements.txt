@@ -9,7 +9,7 @@ django-cloudinary-storage==0.3.0
 django-cors-headers==4.9.0
 django-environ==0.14.0
 django-filter==25.2
-django-unfold==0.104.1
+# django-unfold==0.104.1
 djangorestframework==3.17.1
 djangorestframework-gis==1.2.1
 drf-spectacular==0.29.0
