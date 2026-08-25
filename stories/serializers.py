@@ -7,11 +7,12 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class StorySerializer(serializers.ModelSerializer):
-
     category_name = serializers.CharField(
         source="category.name",
-        read_only=True
+        read_only=True,
+        default="",
     )
+    cover_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Story
@@ -36,3 +37,8 @@ class StorySerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+    def get_cover_image(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+        return None
