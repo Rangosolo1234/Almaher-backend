@@ -55,6 +55,8 @@ if RENDER_EXTERNAL_HOSTNAME:
 
 
 INSTALLED_APPS = [
+    "unfold",
+    "unfold.contrib.filters",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -186,21 +188,93 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+# Static files (handled by WhiteNoise)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+# Media files (handled by Cloudinary)
 MEDIA_URL = "/media/"
+
+# Backward compatibility for django-cloudinary-storage
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+UNFOLD = {
+    "SITE_TITLE": "Almaher Admin",
+    "SITE_HEADER": "Almaher Platform",
+    "SITE_URL": "https://almaherfem.com",
+    "SITE_ICON": None,
+    "THEME": "dark",
+    "COLORS": {
+        "primary": {
+            "50": "240 253 244",
+            "100": "220 252 231",
+            "200": "187 247 208",
+            "300": "134 239 172",
+            "400": "74 222 128",
+            "500": "34 197 94",
+            "600": "22 163 74",
+            "700": "21 128 61",
+            "800": "22 101 52",
+            "900": "20 83 45",
+            "950": "5 46 22",
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Editorial",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Stories",
+                        "icon": "auto_stories",
+                        "link": lambda request: "/admin/stories/story/",
+                    },
+                    {
+                        "title": "Categories",
+                        "icon": "category",
+                        "link": lambda request: "/admin/stories/category/",
+                    },
+                ],
+            },
+            {
+                "title": "Submissions & Audience",
+                "separator": True,
+                "items": [
+                    {
+                        "title": "Nominations",
+                        "icon": "how_to_reg",
+                        "link": lambda request: "/admin/nominations/nomination/",
+                    },
+                    {
+                        "title": "Inquiries",
+                        "icon": "mail",
+                        "link": lambda request: "/admin/inquiries/inquiry/",
+                    },
+                    {
+                        "title": "Subscribers",
+                        "icon": "group",
+                        "link": lambda request: "/admin/subscriptions/subscriber/",
+                    },
+                ],
+            },
+        ],
+    },
+}
