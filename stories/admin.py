@@ -1,16 +1,19 @@
 from django.contrib import admin
-from django.utils.html import format_html
-from .models import Story, Category
+from .models import (Category,Story,StorySection,StorySectionImage,)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ( "name",)
-    search_fields = ("name",)
-    ordering = ("name",)
+    list_display = [
+        "name",
+    ]
+
+    search_fields = [
+        "name",
+    ]
 
 @admin.register(Story)
 class StoryAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "woman_name",
         "title",
         "category",
@@ -19,116 +22,74 @@ class StoryAdmin(admin.ModelAdmin):
         "featured",
         "hero_story",
         "published_date",
-        "cover_preview",
-    )
+    ]
 
-    list_filter = (
+    list_filter = [
         "category",
-        "country",
-        "city",
         "featured",
         "hero_story",
+        "country",
         "published_date",
-    )
+    ]
 
-    search_fields = (
+    search_fields = [
         "woman_name",
         "title",
         "summary",
-        "country",
-        "city",
-        "location",
-    )
+        "story_content",
+    ]
 
     prepopulated_fields = {
-        "slug": (
-            "woman_name",
-            "title",
-        ),
+        "slug": ("woman_name", "title"),
     }
 
-    readonly_fields = (
+    readonly_fields = [
         "created_at",
         "updated_at",
-        "cover_preview",
-    )
+    ]
 
-    fieldsets = (
-        (
-            "Story Information",
-            {
-                "fields": (
-                    "title",
-                    "woman_name",
-                    "quote",
-                    "summary",
-                    "story_content",
-                    "category",
-                )
-            },
-        ),
-        (
-            "Location",
-            {
-                "fields": (
-                    "country",
-                    "city",
-                    "location",
-                )
-            },
-        ),
-        (
-            "Publication",
-            {
-                "fields": (
-                    "read_time",
-                    "featured",
-                    "hero_story",
-                    "published_date",
-                )
-            },
-        ),
-        (
-            "Cover Image",
-            {
-                "fields": (
-                    "cover_image",
-                    "cover_preview",
-                )
-            },
-        ),
-        (
-            "URL",
-            {
-                "fields": (
-                    "slug",
-                )
-            },
-        ),
-        (
-            "Timestamps",
-            {
-                "fields": (
-                    "created_at",
-                    "updated_at",
-                )
-            },
-        ),
-    )
+class StorySectionImageInline(admin.TabularInline):
 
-    ordering = (
-        "-published_date",
-        "-created_at",
-    )
+    model = StorySectionImage
 
-    def cover_preview(self, obj):
-        if obj.cover_image:
-            return format_html(
-                '<img src="{}" width="120" height="80" '
-                'style="object-fit: cover; border-radius: 6px;" />',
-                obj.cover_image.url,
-            )
+    extra = 1
 
-        return "No image"
+    fields = [
+        "image",
+        "caption",
+        "alt_text",
+        "order",
+    ]
 
-    cover_preview.short_description = "Cover"
+    ordering = [
+        "order",
+    ]
+
+@admin.register(StorySection)
+class StorySectionAdmin(admin.ModelAdmin):
+    list_display = [
+        "story",
+        "heading",
+        "layout",
+        "order",
+    ]
+
+    list_filter = [
+        "layout",
+    ]
+
+    search_fields = [
+        "story__woman_name",
+        "story__title",
+        "heading",
+        "content",
+    ]
+
+    ordering = [
+        "story",
+        "order",
+    ]
+
+    inlines = [
+        StorySectionImageInline,
+    ]

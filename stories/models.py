@@ -40,3 +40,40 @@ class Story(models.Model):
 
     def __str__(self):
         return self.woman_name
+
+
+class StorySection(models.Model):
+    LAYOUT_CHOICES = [
+        ("text_left", "Text Left / Image Right"),
+        ("text_right", "Image Left / Text Right"),
+        ("full_width", "Full Width"),
+        ("image_grid", "Image Grid"),
+    ]
+
+    story = models.ForeignKey(Story, on_delete=models.CASCADE, related_name="sections")
+    heading = models.CharField(max_length=255, blank=True)
+    content = models.TextField()
+    layout = models.CharField(max_length=30, choices=LAYOUT_CHOICES,default="text_left")
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        if self.heading:
+            return f"{self.story.woman_name} - {self.heading}"
+        
+        return f"{self.story.woman_name} - Section {self.order}"
+
+class StorySectionImage(models.Model):
+    section = models.ForeignKey(StorySection, on_delete=models.CASCADE, related_name="images")
+    image = CloudinaryField("image", folder="almaher/stories")
+    caption = models.CharField(max_length=255, blank=True)
+    alt_text = models.CharField(max_length=255, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.section} - Image {self.order}"

@@ -1,18 +1,107 @@
 from rest_framework import serializers
-from .models import Story, Category
+
+from .models import (
+    Story,
+    Category,
+    StorySection,
+    StorySectionImage,
+)
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = "__all__"
 
-class StorySerializer(serializers.ModelSerializer):
+class StorySectionImageSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = StorySectionImage
+        fields = [
+            "id",
+            "image",
+            "caption",
+            "alt_text",
+            "order",
+        ]
+
+    def get_image(self, obj):
+        if obj.image:
+            return obj.image.url
+
+        return None
+
+
+class StorySectionSerializer(serializers.ModelSerializer):
+    images = StorySectionImageSerializer(
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = StorySection
+        fields = [
+            "id",
+            "heading",
+            "content",
+            "layout",
+            "order",
+            "images",
+        ]
+
+
+class StoryListSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(
         source="category.name",
         read_only=True,
         default="",
     )
     cover_image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Story
+        fields = [
+            "id",
+            "title",
+            "woman_name",
+            "quote",
+            "summary",
+            "category",
+            "category_name",
+            "country",
+            "city",
+            "location",
+            "read_time",
+            "featured",
+            "hero_story",
+            "cover_image",
+            "slug",
+            "published_date",
+            "created_at",
+            "updated_at",
+        ]
+
+    def get_cover_image(self, obj):
+        if obj.cover_image:
+            return obj.cover_image.url
+
+        return None
+
+
+class StoryDetailSerializer(serializers.ModelSerializer):
+
+    category_name = serializers.CharField(
+        source="category.name",
+        read_only=True,
+        default="",
+    )
+
+    cover_image = serializers.SerializerMethodField()
+
+    sections = StorySectionSerializer(
+        many=True,
+        read_only=True
+    )
 
     class Meta:
         model = Story
@@ -36,9 +125,11 @@ class StorySerializer(serializers.ModelSerializer):
             "published_date",
             "created_at",
             "updated_at",
+            "sections",
         ]
 
     def get_cover_image(self, obj):
         if obj.cover_image:
             return obj.cover_image.url
+
         return None
