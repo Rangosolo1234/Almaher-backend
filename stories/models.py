@@ -29,6 +29,9 @@ class Story(models.Model):
     published_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    author_name = models.CharField(max_length=150, blank=True, default="")
+    author_image = CloudinaryField("author_image", folder="almaher/authors", null=True, blank=True)
+    role_or_subtitle = models.CharField(max_length=200, blank=True, default="")
     
     def save(self, *args, **kwargs):
         if not self.slug:

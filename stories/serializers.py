@@ -89,19 +89,10 @@ class StoryListSerializer(serializers.ModelSerializer):
 
 
 class StoryDetailSerializer(serializers.ModelSerializer):
-
-    category_name = serializers.CharField(
-        source="category.name",
-        read_only=True,
-        default="",
-    )
-
+    category_name = serializers.CharField(source="category.name", read_only=True,default="",)
     cover_image = serializers.SerializerMethodField()
-
-    sections = StorySectionSerializer(
-        many=True,
-        read_only=True
-    )
+    sections = StorySectionSerializer(many=True,read_only=True)
+    author_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Story
@@ -126,7 +117,15 @@ class StoryDetailSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "sections",
+            "author_name",
+            "author_image",
+            "role_or_subtitle",
         ]
+
+    def get_author_image(self, obj):
+        if obj.author_image:
+            return obj.author_image.url
+        return None
 
     def get_cover_image(self, obj):
         if obj.cover_image:
