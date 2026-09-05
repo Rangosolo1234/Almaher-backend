@@ -29,6 +29,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
+# Production security
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+SECURE_SSL_REDIRECT = config(
+    "SECURE_SSL_REDIRECT",
+    default=False,
+    cast=bool,
+)
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
@@ -113,11 +127,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
+# Update security
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ]
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+
+    # Rate limiting
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle",
+    ],
+
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "100/hour",
+        "user": "1000/hour",
+        "contact": "5/hour",
+        "subscription": "5/hour",
+        "nomination": "5/hour",
+    },
 }
 
 SPECTACULAR_SETTINGS = {
