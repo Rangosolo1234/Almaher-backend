@@ -11,6 +11,7 @@ django-environ==0.14.0
 django-filter==25.2
 djangorestframework==3.17.1
 djangorestframework-gis==1.2.1
+djangorestframework_simplejwt==5.5.1
 drf-spectacular==0.29.0
 gunicorn==26.2.0
 idna==3.19
@@ -19,6 +20,7 @@ jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
 pillow==12.2.0
 psycopg2-binary==2.9.12
+PyJWT==2.15.1
 python-decouple==3.8
 python-dotenv==1.2.2
 PyYAML==6.0.3
